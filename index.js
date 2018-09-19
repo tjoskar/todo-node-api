@@ -4,41 +4,49 @@ const app = express()
 
 app.use(express.json())
 
-let todos = []
+let todos = [
+  {
+    id: 1,
+    todo: 'Eat lunch'
+  },
+  {
+    id: 2,
+    todo: 'something else'
+  }
+]
 
 app.get('/ping', (req, res) => {
   res.send('Pong!')
 })
 
-// Get all
+// Get all (CHECK)
 app.get('/todo', function(req, res) {
   res.send(todos)
 })
 
-// get one todo
+// get one todo (CHECK)
 app.get('/todo/:id', function(req, res) {
-  res.send({
-    id: req.params.id
-  })
+  res.send( todos.filter(todo => todo.id == req.params.id))
 })
 
-// update
+// update one todo (CHECK)
 app.put('/todo/:id', function(req, res) {
-  res.send({
-    id: req.params.id,
-    data: req.body
-  })
+  todos.map(todo => {if(todo.id == req.params.id){
+    todo.todo = req.body.todo 
+  }}) 
 })
 
-// delete
+// delete (CHECK)
 app.delete('/todo/:id', function(req, res) {
-  res.send({
-    id: req.params.id
-  })
+  let index = todos.findIndex(x => x.id == req.params.id)
+  todos.splice(index, 1)
+
 })
 
-// create
+// create (CHECK)
 app.post('/todo', function(req, res) {
+  todos.push(req.body)
+  //console.log(req)
   res.sendStatus(201)
 })
 
